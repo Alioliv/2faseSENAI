@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import './App.css'
 import Navbar from './components/Navbar'
+import UsarReact from './components/UsarReact'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -10,7 +11,7 @@ function App() {
     <>
       <Navbar/>
       <h1>pagina de React JS</h1>
-      <MotivosParaUsarReact/>
+      <UsarReact/>
     </>
   )
 }
