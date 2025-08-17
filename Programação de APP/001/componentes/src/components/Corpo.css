@@ -1,0 +1,4 @@
+.corpo-container{
+    background-color: rgb(27, 17, 20);
+    min-height: calc(100vh - 70px) /*Altura da tela - a altura que eu fixei na navbar (70px)*/
+}
