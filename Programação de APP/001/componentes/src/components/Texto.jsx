@@ -1,11 +1,23 @@
 import './Texto.css'
 
-function Texto() {
+
+function Texto(props) {
   return (
-    <div className='texto-container'>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At aliquid eveniet architecto voluptatem quae veritatis nemo corporis soluta dolorem, maiores magni asperiores cum quasi quibusdam esse ea excepturi, totam itaque!</p>
+    <div className="texto-container">
+        {props.texto} {props.emoji}
+
+        {console.log(props)}
     </div>
   )
 }
 
 export default Texto
+/*function Texto() {
+  return (
+    <div className='texto-container'>
+      
+    </div>
+  )
+}
+
+export default Texto*/
