@@ -1,25 +1,35 @@
-import { useState } from 'react';
-import LucroProduto from './LucroProduto';
-import MediaConceito from './MediaConceito';
-import Cofrinho from './Cofrinho';
-import CopoMeioCheio from './CopoMeioCheio';
-import DoisCopos from './DoisCopos';
-import Emprestimo from './Emprestimo';
+// Estilos
+//import './App.css';
 
-const componentes = {
+// Componentes
+import Cofrinho from './components/Cofrinho';
+import CopoMeioCheio from './components/CopoMeioCheio';
+import DoisCopos from './components/DoisCopos';
+import Emprestimo from './components/Emprestimo';
+import LucroProduto from './components/LucroProduto';
+import MediaConceito from './components/MediaConceito';
+
+/*const componentes = {
   'Lucro do Produto': <LucroProduto />,
   'Média e Conceito': <MediaConceito />,
   'Cofrinho': <Cofrinho />,
   'Copo Meio Cheio': <CopoMeioCheio />,
   'Dois Copos': <DoisCopos />,
   'Empréstimo': <Emprestimo />,
-};
+};*/
 
 function App() {
   const [ativo, setAtivo] = useState('Lucro do Produto');
 
   return (
+
     <div style={{ padding: '2rem' }}>
+      <Cofrinho />
+      <CopoMeioCheio />
+      <DoisCopos />
+      <Emprestimo />
+      <LucroProduto />
+      <MediaConceito />
       <h1>📚 Exercícios em React</h1>
       <nav>
         {Object.keys(componentes).map(nome => (
