@@ -58,7 +58,7 @@ function App() {
 
       {recibo && (
         <div className="recibo">
-          <h2>🧾 Recibo</h2>
+          <h2>Recibo</h2>
           <ul>
             {recibo.itens.map(item => (
               <li key={item.nome}>
