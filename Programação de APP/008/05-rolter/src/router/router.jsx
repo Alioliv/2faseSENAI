@@ -9,6 +9,8 @@ const rauter = createBrowserRouter([
     {path: '/Paginas1', element: <Pagina1/> },
     {path: '/Paginas2', element: <Pagina2/> },
     {path: '/Paginas3', element: <Pagina3/> },
+    {path: '/Produtos', element: <Produtos/>},
+
 ])
 
 export default router
