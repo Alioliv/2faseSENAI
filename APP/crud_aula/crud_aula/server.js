@@ -7,11 +7,11 @@ let connection;
 
 async function initDB() {
   connection = await mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    database: "crud_aula",
-    user: "root",
-    password: "senai",
+    host: "easypanel.grupocantoacanto.com.br",
+    port: 3396,
+    database: "development",
+    user: "mysql",
+    password: "abb84eac0b3328dcf04a",
   });
   console.log("Conectado ao banco de dados!");
 }
@@ -133,8 +133,8 @@ app.get("/clientes/:id", async (req, res) => {
       [id]
     );
     if (cliente.length === 0) {
-      return res.status(404).json({ erro: "Cliente nÃ£o encontrado" }); // 201 para criação  
-    }   
+      return res.status(404).json({ erro: "Cliente nÃ£o encontrado" });
+    }
     res.json(cliente[0]);
   } catch (error) {
     console.error(error.message);
@@ -154,5 +154,3 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log("API Funcionando");
 });
-
-//  criar o app.
