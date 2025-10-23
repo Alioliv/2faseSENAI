@@ -9,7 +9,7 @@ async function initDB() {
   connection = await mysql.createConnection({
     host: "localhost",
     port: 3306,
-    database: "crud_aula",
+    database: "crud_cliente_demo",
     user: "root",
     password: "senai",
   });
