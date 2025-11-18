@@ -1,7 +1,7 @@
-// criar rotas 
+// criar rotas
 
 import express from 'express'
-import conexao from '../projeto_codigo/infra/conexao.js'
+import conexao from '../infra/conexao.js'
 
 const app = express()
 
@@ -9,9 +9,23 @@ app.use(express.json())
 
 //criar rota
 
-app.get('/estudantesY', (req, res) =>{
+app.get('/estudantes', (req, res) => {
     const sql = 'SELECT * FROM dados_estudantes'
-    conexao.query(sql,(erro, resultado) =>{
+    conexao.query(sql, (erro, resultado) => {
+        if(erro) {
+            console.log(erro)
+            return res.status(500).json({ erro: 'Erro ao buscar estudantes' })
+        } else {
+            return res.json(resultado)
+        }
+    })
+})
+
+
+app.get('/estudantes/:id', (req, res) =>{
+    const id = req.params.id
+    const sql = 'SELECT * FROM dados_estudantes WHERE id_estudante=?'
+    conexao.query(sql, id, (erro, resultado) =>{
         if(erro){
             console.log(erro)
         } else {
@@ -19,5 +33,4 @@ app.get('/estudantesY', (req, res) =>{
         }
     })
 })
-
 export default app
