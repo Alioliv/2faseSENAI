@@ -1,0 +1,138 @@
+CREATE DATABASE livraria_xpto;
+USE livraria_xpto;
+
+
+CREATE TABLE cliente (
+idcliente INT PRIMARY KEY AUTO_INCREMENT,
+nome_cliente VARCHAR(45),
+rg_cliente VARCHAR(45),
+cpf_cliente VARCHAR(45),
+endereco_cliente VARCHAR(45)
+);
+
+
+CREATE TABLE editora (
+ideditora INT PRIMARY KEY AUTO_INCREMENT,
+nome_fantasia_editora VARCHAR(45),
+razaosocial_editora VARCHAR(45),
+endereco_editora VARCHAR(45),
+telefone_editora VARCHAR(45)
+);
+
+
+CREATE TABLE autor (
+idautor INT PRIMARY KEY AUTO_INCREMENT,
+nome_autor VARCHAR(45),
+rg_autor VARCHAR(45)
+);
+
+
+CREATE TABLE financiador (
+idfinanciador INT PRIMARY KEY AUTO_INCREMENT,
+nome_financiador VARCHAR(45),
+cnpj_financiador VARCHAR(45)
+);
+
+
+
+CREATE TABLE livro (
+idlivro INT PRIMARY KEY AUTO_INCREMENT,
+isbn_livro VARCHAR(45),
+titulo_livro VARCHAR(45),
+preco_livro VARCHAR(45),
+categoria_livro VARCHAR(45),
+ideditora INT,
+idautor INT,
+idfinanciador INT,
+FOREIGN KEY (ideditora) 
+REFERENCES editora(ideditora),
+FOREIGN KEY (idautor) 
+REFERENCES autor(idautor),
+FOREIGN KEY (idfinanciador)
+REFERENCES financiador(idfinanciador)
+);
+
+
+CREATE TABLE pedido (
+idpedido INT PRIMARY KEY AUTO_INCREMENT,
+qtd_pedido VARCHAR(45),
+idcliente INT,
+idlivro INT,
+FOREIGN KEY (idcliente)
+REFERENCES cliente(idcliente),
+FOREIGN KEY (idlivro)
+REFERENCES livro(idlivro)
+);
+
+-- Inserir pelo menos 5 registros por tabela
+
+-- 1 cliente
+INSERT INTO cliente (nome_cliente, rg_cliente, cpf_cliente, endereco_cliente) VALUES
+('alice', '1234567', '11111111111', 'Rua a, 123'),
+('bruno', '2345678', '22222222222', 'Rua b, 456'),
+('carla', '3456789', '33333333333', 'Rua c, 789'),
+('diego', '4567890', '44444444444', 'Rua d, 101'),
+('eduarda', '5678901', '55555555555', 'Rua e, 202');
+
+-- 2 editora
+INSERT INTO editora (nome_fantasia_editora, razaosocial_editora, endereco_editora, telefone_editora) VALUES
+('Editora Sol', 'sol Ltda', 'Av Central, 100', '1111-1111'),
+('Editora Letra','letra Ltda', 'Av Central, 200', '2222-2222'),
+('Editora Estrela', 'estrela Ltda', 'Av Central, 300', '3333-3333'),
+('Editora Mar', 'mar Ltda', 'Av Central, 400', '4444-4444'),
+('Editora Céu', 'céu Ltda', 'Av Central, 500', '5555-5555');
+
+-- 3 autor
+INSERT INTO autor (nome_autor, rg_autor) VALUES
+('João Silva', '8888888'),
+('Maria Souza', '9999999'),
+('Pedro Costa', '1111111'),
+('Fernanda Lima', '444444'),
+('Rafael Alves', '7777');
+
+-- 4 financiador
+INSERT INTO financiador (nome_financiador, cnpj_financiador) VALUES
+('Banco A', '11111111000101'),
+('Banco B', '22222222000102'),
+('Banco C', '33333333000103'),
+('Banco D', '44444444000104'),
+('Banco E', '55555555000105');
+
+-- 5 livro
+INSERT INTO livro (isbn_livro, titulo_livro, preco_livro,categoria_livro, ideditora, idautor, idfinanciador) VALUES
+('ISBN001', 'Livro A', '39.90', 'Romance', 1, 1, 1),
+('ISBN002', 'Livro B', '29.90', 'Aventura', 2, 2, 2),
+('ISBN003', 'Livro C', '49.90', 'Terror', 3, 3, 3),
+('ISBN004', 'Livro D', '19.90', 'Drama', 4, 4, 4),
+('ISBN005', 'Livro E', '59.90', 'Fantasia', 5, 5, 5);
+
+-- 6 pedido 
+INSERT INTO pedido (qtd_pedido, idcliente, idlivro) VALUES
+('2', 1, 1),
+('1', 2, 2),
+('3', 3, 3),
+('1', 4, 4),
+('5', 5, 5);
+
+-- Realizar a consulta nas 5 tabelas por meio do comando SELECT * FROM nome_da_tabela
+SELECT * FROM livro ;
+SELECT * FROM autor; 
+SELECT * FROM pedido; 
+SELECT * FROM cliente;
+SELECT * FROM financiador; 
+
+-- Cada editora, financiador e autor devem ter pelo menos 1 livro associado a eles
+INSERT INTO livro (isbn_livro, titulo_livro, preco_livro, categoria_livro, ideditora, idautor, idfinanciador) 
+VALUES ('9876543210', 'Livro Inválido', '80.00', 'Drama', 1, 1, 1);
+
+-- Ao tentar excluir uma editora, financiador ou autor não é para o banco de dados concluir essa exclusão, pois são chave estrangeira na tabela livro.
+DROP TABLE autor;
+
+
+-- inserir valores que existem nas tabelas relacionadas.
+-- Cada cliente ou livro devem ter pelo menos 1 pedido associado a eles
+INSERT INTO pedido (qtd_pedido, idcliente, idlivro)
+VALUES ('1', 1, 1);
+
+-- Ao tentar excluir um cliente ou livro não é para o banco de dados concluir essa exclusão, pois são chave estrangeira na tabela pedido.
+DROP TABLE cliente;

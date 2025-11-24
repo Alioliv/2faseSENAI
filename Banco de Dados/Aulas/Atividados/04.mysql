@@ -1,0 +1,82 @@
+CREATE DATABASE livraria_xpto;
+USE livraria_xpto;
+
+
+CREATE TABLE cliente (
+idcliente INT PRIMARY KEY AUTO_INCREMENT,
+nome_cliente VARCHAR(45),
+rg_cliente VARCHAR(45),
+cpf_cliente VARCHAR(45) UNIQUE,
+endereco_cliente VARCHAR(45)
+);
+
+
+CREATE TABLE editora (
+ideditora INT PRIMARY KEY AUTO_INCREMENT,
+nome_fantasia_editora VARCHAR(45),
+razaosocial_editora  VARCHAR(45) DEFAULT 'Brasil',
+endereco_editora VARCHAR(45),
+telefone_editora VARCHAR(45)
+);
+
+
+CREATE TABLE autor (
+idautor INT PRIMARY KEY AUTO_INCREMENT,
+nome_autor VARCHAR(45) NOT NULL,
+rg_autor VARCHAR(45)
+);
+
+
+CREATE TABLE financiador (
+idfinanciador INT PRIMARY KEY AUTO_INCREMENT,
+nome_financiador VARCHAR(45),
+cnpj_financiador VARCHAR(45)
+);
+
+
+
+CREATE TABLE livro (
+idlivro INT PRIMARY KEY AUTO_INCREMENT,
+isbn_livro VARCHAR(45),
+titulo_livro VARCHAR(45),
+preco_livro VARCHAR(45),
+categoria_livro ENUM ('Horror','Ficção','Romance','Ação'),
+ideditora INT,
+idautor INT,
+idfinanciador INT,
+FOREIGN KEY (ideditora) 
+REFERENCES editora(ideditora),
+FOREIGN KEY (idautor) 
+REFERENCES autor(idautor),
+FOREIGN KEY (idfinanciador)
+REFERENCES financiador(idfinanciador)
+);
+
+
+CREATE TABLE pedido (
+idpedido INT PRIMARY KEY AUTO_INCREMENT,
+qtd_pedido INT CHECK (qtd_pedido > 0),
+idcliente INT,
+idlivro INT,
+FOREIGN KEY (idcliente)
+REFERENCES cliente(idcliente),
+FOREIGN KEY (idlivro)
+REFERENCES livro(idlivro)
+);
+
+-- adicionar o check na coluna preço livro 
+ALTER TABLE livro
+MODIFY COLUMN preco_livro DECIMAL(10,2);
+-- o CHECK não está funcionando, o MySQL valida a estrutura inteira da tabela — e o ENUM com acentos costuma causar erro de validação
+ALTER TABLE livro
+ADD CONSTRAINT chk_preco_livro CHECK (preco_livro > 0);
+
+-- adiocar o ENUM na coluna fantasia Editora A , Editora B ,Editora C
+ALTER TABLE editora
+MODIFY COLUMN nome_fantasia_editora 
+ENUM('Editora A', 'Editora B', 'Editora C');
+
+-- trocar o financiador DEFAULT será financiador Público.
+ALTER TABLE financiador 
+MODIFY COLUMN nome_financiador VARCHAR(45)
+    DEFAULT 'Financiador Público';

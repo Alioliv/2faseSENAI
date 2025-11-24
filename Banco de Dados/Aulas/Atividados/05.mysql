@@ -1,0 +1,71 @@
+
+CREATE DATABASE estacionamento_db;
+USE estacionamento_db;
+
+-- Clientes
+CREATE TABLE cliente (
+id_cliente INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(45) NOT NULL,
+dt_nascimento DATE
+);
+
+-- Categorias
+CREATE TABLE categoria (
+id_categoria INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(50) NOT NULL,
+descricao VARCHAR(150)
+);
+
+-- Veículos
+CREATE TABLE veiculo (
+id_veiculo INT PRIMARY KEY AUTO_INCREMENT,
+placa VARCHAR(10) UNIQUE NOT NULL,
+cor VARCHAR(30),
+cliente_id INT,
+categoria_id INT,
+FOREIGN KEY (cliente_id)
+REFERENCES cliente(id_cliente),
+FOREIGN KEY (categoria_id) 
+REFERENCES categoria(id_categoria)
+);
+
+-- Estacionamento
+CREATE TABLE estacionamento (
+id_estacionamento INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(100),
+capacidade INT,
+dt_entrada DATE,
+dt_saida DATE,
+hs_entrada TIME,
+hs_saida TIME,
+veiculo_id INT,
+FOREIGN KEY (veiculo_id)
+REFERENCES veiculo(id_veiculo)
+);
+
+
+-- 3 Clientes
+INSERT INTO cliente (nome, dt_nascimento) VALUES
+('João Silva', '1990-05-10'),
+('Maria Souza', '1985-08-22'),
+('Carlos Oliveira', '2000-01-15');
+
+-- 3 Categorias 
+INSERT INTO categoria (nome, descricao) VALUES
+('Utilitário', 'Veículo pequeno utilitário'),
+('Van', 'Veículo de médio porte'),
+('Pick-up', 'Veículo de carga leve');
+
+-- 5 Veículos
+INSERT INTO veiculo (placa, cor, cliente_id, categoria_id) VALUES
+('AAA-2020', 'Preto', 1, 1),
+('BBB-1111', 'Branco', 1, 1),
+('CCC-5050', 'Azul', 2, 2),
+('DDD-1234', 'Branco', 2, 1),
+('RRR-2525', 'Azul', 3, 3);
+
+INSERT INTO estacionamento (nome, capacidade, dt_entrada, dt_saida, hs_entrada, hs_saida, veiculo_id) VALUES
+('Estacionamento Central', 50, CURDATE(), CURDATE(), TIME('08:30:00'), TIME('12:00:00'), 1),
+('Estacionamento Central', 50, CURDATE(), CURDATE(), TIME('09:00:00'), TIME('11:45:00'), 2),
+('Estacionamento Central', 50, CURDATE(), CURDATE(), TIME('10:15:00'), TIME('14:30:00'), 3);
+
