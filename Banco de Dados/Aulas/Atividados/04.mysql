@@ -67,7 +67,7 @@ REFERENCES livro(idlivro)
 -- adicionar o check na coluna preço livro 
 ALTER TABLE livro
 MODIFY COLUMN preco_livro DECIMAL(10,2);
--- o CHECK não está funcionando, o MySQL valida a estrutura inteira da tabela — e o ENUM com acentos costuma causar erro de validação
+--  o MySQL valida a estrutura inteira da tabela — e o ENUM com acentos costuma causar erro de validação
 ALTER TABLE livro
 ADD CONSTRAINT chk_preco_livro CHECK (preco_livro > 0);
 
@@ -80,3 +80,32 @@ ENUM('Editora A', 'Editora B', 'Editora C');
 ALTER TABLE financiador 
 MODIFY COLUMN nome_financiador VARCHAR(45)
     DEFAULT 'Financiador Público';
+
+INSERT INTO cliente (nome_cliente, rg_cliente, cpf_cliente, endereco_cliente) VALUES
+('Ana Silva', '1234567', '111.111.111-11', 'Rua A, 100'),
+('Bruno Costa', '2345678', '222.222.222-22', 'Rua B, 200'),
+('Carla Souza', '3456789', '333.333.333-33', 'Rua C, 300');
+
+
+-- (lembrando que nome_fantasia_editora é ENUM)
+INSERT INTO editora (nome_fantasia_editora, razaosocial_editora, endereco_editora, telefone_editora) VALUES
+('Editora A', 'Brasil', 'Av Central, 10', '1111-1111'),
+('Editora B', 'Brasil', 'Av Sul, 20', '2222-2222'),
+('Editora C', 'Brasil', 'Av Norte, 30', '3333-3333');
+
+INSERT INTO autor (nome_autor, rg_autor) VALUES
+('Machado de Assis', '998877'),
+('Clarice Lispector', '887766'),
+('Stephen King', '776655');
+
+-- 
+INSERT INTO financiador (nome_financiador, cnpj_financiador) VALUES
+('Financiador Privado X', '01.111.111/0001-01'),
+('Financiador Privado Y', '02.222.222/0001-02'),
+('Financiador Público', '00.000.000/0001-00');  -- usa o DEFAULT no próximo se quiser
+
+-- Aqui precisamos usar ids que existem nas tabelas: editoras: 1, 2, 3 autores: 1, 2, 3 financiadores: 1, 2, 3
+INSERT INTO livro (isbn_livro, titulo_livro, preco_livro, categoria_livro, ideditora, idautor, idfinanciador) VALUES
+('ISBN-001', 'A Sombra', 49.90, 'Horror',   1, 3, 1),
+('ISBN-002', 'Histórias Curtas', 39.50, 'Ficção', 2, 2, 2),
+('ISBN-003', 'Romance Antigo', 59.90, 'Romance', 3, 1, 3);

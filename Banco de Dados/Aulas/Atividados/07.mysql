@@ -1,0 +1,77 @@
+CREATE DATABASE abastecimento;
+USE abastecimento;
+
+CREATE TABLE posto (
+    id_posto INT PRIMARY KEY AUTO_INCREMENT,
+    capacidade_total DECIMAL(10,2),
+    estoque DECIMAL(10,2),
+    preco_litro DECIMAL(10,2) DEFAULT 6.50
+);
+
+CREATE TABLE veiculo (
+    id_veiculo INT PRIMARY KEY AUTO_INCREMENT,
+    placa VARCHAR(10),
+    litros_abastecidos DECIMAL(10,2),
+    data_abastecimento DATE,
+    id_posto INT,
+    FOREIGN KEY (id_posto) 
+    REFERENCES posto(id_posto)
+);
+
+-- Trigger simples para atualizar o estoque
+DELIMITER //
+CREATE TRIGGER atualiza_estoque
+AFTER INSERT ON veiculo
+FOR EACH ROW
+BEGIN
+UPDATE posto
+SET estoque = estoque - NEW.litros_abastecidos
+WHERE id_posto = NEW.id_posto;
+END//
+DELIMITER ;
+
+-- Inserindo um posto 
+INSERT INTO posto (capacidade_total, estoque) VALUES
+(10000.00, 5000.00);
+
+-- abastecimento
+INSERT INTO veiculo (placa, litros_abastecidos, data_abastecimento, id_posto)
+VALUES ('ABC-1234', 40.5, CURDATE(), 1);
+
+
+// parte 2 
+
+CREATE DATABASE pedidos;
+USE pedidos;
+
+CREATE TABLE pedido (
+id_pedido INT PRIMARY KEY AUTO_INCREMENT,
+data_horario VARCHAR(50),
+tipo_entrega VARCHAR(10),
+preco DECIMAL(10,2),
+quantidade INT,
+valor_total DECIMAL(10,2),
+valor_total_com_desconto DECIMAL(10,2)
+);
+
+INSERT INTO pedido (data_horario, tipo_entrega, preco, quantidade)
+VALUES
+('à critério do estudante', 'Urgente', 10, 6),
+('à critério do estudante', 'Normal', 150, 8),
+('à critério do estudante', 'Urgente', 130, 15),
+('à critério do estudante', 'Normal', 80, 3),
+('à critério do estudante', 'Urgente', 90, 4),
+('à critério do estudante', 'Normal', 15, 5);
+
+SELECT * FROM pedido;
+
+
+DELIMITER //
+CREATE TRIGGER trg_calcula_valores
+BEFORE INSERT ON pedido
+FOR EACH ROW
+BEGIN
+SET NEW.valor_total = NEW.preco * NEW.quantidade;
+SET NEW.valor_total_com_desconto = NEW.valor_total - (NEW.valor_total * 0.10);
+END //
+DELIMITER ;

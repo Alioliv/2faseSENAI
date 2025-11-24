@@ -1,0 +1,129 @@
+-- Criação do banco de dados
+CREATE DATABASE escola_pagamentos;
+USE escola_pagamentos;
+
+-- Tabela ALUNO
+CREATE TABLE aluno (
+    id_aluno INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL
+);
+
+-- Tabela CURSO
+CREATE TABLE curso (
+    id_curso INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    duracao INT NOT NULL
+);
+
+-- Tabela INSCRICAO
+CREATE TABLE inscricao (
+    id_inscricao INT PRIMARY KEY AUTO_INCREMENT,
+    aluno_id INT NOT NULL,
+    curso_id INT NOT NULL,
+    dt_inscricao DATE NOT NULL,
+    FOREIGN KEY (aluno_id) REFERENCES aluno(id_aluno),
+    FOREIGN KEY (curso_id) REFERENCES curso(id_curso)
+);
+
+-- Tabela MENSALIDADE
+CREATE TABLE mensalidade (
+    id_mensalidade INT PRIMARY KEY AUTO_INCREMENT,
+    inscricao_id INT NOT NULL,
+    dt_vencimento DATE NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
+    status_pagamento ENUM('Pago', 'Não Pago') DEFAULT 'Não Pago',
+    FOREIGN KEY (inscricao_id) REFERENCES inscricao(id_inscricao)
+);
+
+
+-- alunos
+INSERT INTO aluno (id_aluno, nome) VALUES
+(1, 'Ana Souza'),
+(2, 'Bruno Lima'),
+(3, 'Carla Mendes'),
+(4, 'Diego Rocha'),
+(5, 'Eduarda Silva');
+
+--  cursos 
+INSERT INTO curso (id_curso, nome, duracao) VALUES
+(1, 'Administração', 36),
+(2, 'Engenharia', 60),
+(3, 'Direito', 48),
+(4, 'Informática', 24),
+(5, 'Design Gráfico', 30);
+
+-- inscrições 
+INSERT INTO inscricao (id_inscricao, dt_inscricao, aluno_id, curso_id) VALUES
+(1, '2020-01-02', 4, 4),
+(2, '2020-01-02', 3, 2),
+(3, '2020-01-02', 2, 3),
+(4, '2020-06-02', 1, 3),
+(5, '2020-06-02', 3, 5),
+(6, '2020-06-02', 5, 2),
+(7, '2020-06-02', 2, 2);
+
+-- mensalidades 
+INSERT INTO mensalidade (id_mensalidade, dt_vencimento, valor, status_pagamento, inscricao_id) VALUES
+(1, '2020-01-10', 550.00, 'Pago', 1),
+(2, '2020-01-10', 540.00, 'Pago', 2),
+(3, '2020-01-10', 530.00, 'Pago', 3),
+(4, '2020-01-10', 570.00, 'Não Pago', 4),
+(5, '2020-01-10', 560.00, 'Não Pago', 5),
+(6, '2020-01-10', 560.00, 'Não Pago', 6);
+
+-- a) Soma de todas as mensalidades por aluno
+SELECT a.nome AS aluno, SUM(m.valor) AS total_mensalidades
+FROM mensalidade m
+JOIN inscricao i ON m.inscricao_id = i.id_inscricao
+JOIN aluno a ON i.aluno_id = a.id_aluno
+GROUP BY a.nome;
+
+-- b) Soma de todas as mensalidades com status "Não Pago"
+SELECT SUM(valor) AS total_nao_pagas
+FROM mensalidade
+WHERE status_pagamento = 'Não Pago';
+
+-- c) Valor médio de mensalidade paga por aluno
+SELECT a.nome AS aluno, AVG(m.valor) AS media_pagas
+FROM mensalidade m
+JOIN inscricao i ON m.inscricao_id = i.id_inscricao
+JOIN aluno a ON i.aluno_id = a.id_aluno
+WHERE m.status_pagamento = 'Pago'
+GROUP BY a.nome;
+
+-- d) Valor máximo da mensalidade
+SELECT MAX(valor) AS valor_maximo
+FROM mensalidade;
+
+-- e) Valor mínimo da mensalidade
+SELECT MIN(valor) AS valor_minimo
+FROM mensalidade;
+
+-- f) Valor mínimo da mensalidade não paga
+SELECT MIN(valor) AS menor_nao_paga
+FROM mensalidade
+WHERE status_pagamento = 'Não Pago';
+
+-- g) Nomes dos alunos sem duplicar (usando DISTINCT)
+SELECT DISTINCT nome
+FROM aluno;
+
+-- Outra forma (usando GROUP BY)
+SELECT nome
+FROM aluno
+GROUP BY nome;
+
+-- h) Somatório das mensalidades anterior a 10/jun/2020
+SELECT SUM(valor) AS total_anteriores
+FROM mensalidade
+WHERE dt_vencimento < '2020-06-10';
+
+-- i) Somatório das mensalidades posterior a 09/jun/2020
+SELECT SUM(valor) AS total_posteriores
+FROM mensalidade
+WHERE dt_vencimento > '2020-06-09';
+
+-- j) Somatório das mensalidades entre id_mensalidade 2 e 5
+SELECT SUM(valor) AS total_entre_2_e_5
+FROM mensalidade
+WHERE id_mensalidade BETWEEN 2 AND 5;

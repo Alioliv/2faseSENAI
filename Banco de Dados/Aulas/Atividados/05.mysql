@@ -43,7 +43,6 @@ FOREIGN KEY (veiculo_id)
 REFERENCES veiculo(id_veiculo)
 );
 
-
 -- 3 Clientes
 INSERT INTO cliente (nome, dt_nascimento) VALUES
 ('João Silva', '1990-05-10'),
@@ -64,8 +63,44 @@ INSERT INTO veiculo (placa, cor, cliente_id, categoria_id) VALUES
 ('DDD-1234', 'Branco', 2, 1),
 ('RRR-2525', 'Azul', 3, 3);
 
+-- 3 Estacionamentos 
 INSERT INTO estacionamento (nome, capacidade, dt_entrada, dt_saida, hs_entrada, hs_saida, veiculo_id) VALUES
 ('Estacionamento Central', 50, CURDATE(), CURDATE(), TIME('08:30:00'), TIME('12:00:00'), 1),
 ('Estacionamento Central', 50, CURDATE(), CURDATE(), TIME('09:00:00'), TIME('11:45:00'), 2),
 ('Estacionamento Central', 50, CURDATE(), CURDATE(), TIME('10:15:00'), TIME('14:30:00'), 3);
 
+-- 1 Realize um INNER JOIN entre as tabelas veiculo, categoria e cliente
+SELECT v.id_veiculo, v.placa, v.cor, c.nome AS cliente, cat.nome AS categoria
+FROM veiculo v
+INNER JOIN cliente c ON v.cliente_id = c.id_cliente
+INNER JOIN categoria cat ON v.categoria_id = cat.id_categoria;
+
+-- 2 Realize um LEFT JOIN entre as tabelas veiculo e cliente
+SELECT v.id_veiculo, v.placa, v.cor, c.nome AS cliente
+FROM veiculo v
+LEFT JOIN cliente c ON v.cliente_id = c.id_cliente;
+
+-- 3 Realize um RIGHT JOIN entre as tabelas veiculo e categoria
+SELECT v.id_veiculo, v.placa, v.cor, cat.nome AS categoria
+FROM veiculo v
+RIGHT JOIN categoria cat ON v.categoria_id = cat.id_categoria;
+
+-- 4 Realize um FULL JOIN entre as tabelas veiculo e cliente
+SELECT v.id_veiculo, v.placa, v.cor, c.nome AS cliente
+FROM veiculo v
+LEFT JOIN cliente c ON v.cliente_id = c.id_cliente
+UNION
+SELECT v.id_veiculo, v.placa, v.cor, c.nome AS cliente
+FROM veiculo v
+RIGHT JOIN cliente c ON v.cliente_id = c.id_cliente;
+
+-- 5  Realize um INNER JOIN entre as tabelas veiculo e cliente, é para aparecer nas colunas da consultas as seguintes descrições: (id_veiculo, placa_registrada, cor, nome_do_cliente)
+SELECT v.id_veiculo, v.placa AS placa_registrada, v.cor, c.nome AS nome_do_cliente
+FROM veiculo v
+INNER JOIN cliente c ON v.cliente_id = c.id_cliente;
+
+-- 6  Crie uma VIEW para a consulta realizada no passo anterior com o nome de: vw_veiculo_cliente
+CREATE VIEW vw_veiculo_cliente AS
+SELECT v.id_veiculo, v.placa AS placa_registrada, v.cor, c.nome AS nome_do_cliente
+FROM veiculo v
+INNER JOIN cliente c ON v.cliente_id = c.id_cliente;
